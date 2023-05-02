@@ -1,5 +1,6 @@
 import * as ts from "typescript";
-import { DIFFICULTY, Difficulty } from './types';
+import { ChallengesByDifficulty, DIFFICULTY, Difficulty } from './types';
+import { handleBadgesMarkdown } from './to-badge';
 
 /** Runs ts for all found challenges, returning all the filenames with no errors */
 function compile(fileNames: string[], options: ts.CompilerOptions): string[] {
@@ -53,11 +54,6 @@ function getCompletedChallenges(): string[] {
     }
 }
 
-type ChallengesByDifficulty = {
-    difficulty: Difficulty;
-    challenges: string[];
-};
-
 /** Groups each challenge based on his difficulty. Difficulty level is found in the challenge name */
 function groupChallenges(challengeFullNames: string[]): ChallengesByDifficulty[] {
     const result: ChallengesByDifficulty[] = (<Difficulty[]>[DIFFICULTY.warm, DIFFICULTY.easy, DIFFICULTY.medium, DIFFICULTY.hard, DIFFICULTY.extreme]).map(difficulty => {
@@ -65,13 +61,17 @@ function groupChallenges(challengeFullNames: string[]): ChallengesByDifficulty[]
 
         return {
             difficulty: difficulty,
-            challenges: challengeFullNames.reduce<string[]>((acc, challenge) => {
+            challenges: challengeFullNames.reduce<ChallengesByDifficulty["challenges"]>((acc, challenge) => {
                 const matches = [...challenge.matchAll(regexp)];
                 if (matches?.length) {
                     // Also retrieving challenge index and name from the full challenge name
                     const [, challengeIndex, challengeName] = matches[0];
 
-                    acc.push(`${challengeIndex}・${challengeName}`);
+                    acc.push({
+                        index: parseInt(challengeIndex),
+                        name: challengeName,
+                        fullName: challenge.replace(".ts", "")
+                    });
                 }
                 return acc;
             }, [])
@@ -83,4 +83,5 @@ function groupChallenges(challengeFullNames: string[]): ChallengesByDifficulty[]
 
 const challenges = getCompletedChallenges();
 const challengesByDifficulty: ChallengesByDifficulty[] = groupChallenges(challenges);
-console.log(challengesByDifficulty);
+const markdownToApply: string = handleBadgesMarkdown(challengesByDifficulty);
+console.log(markdownToApply);

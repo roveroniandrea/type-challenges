@@ -11,5 +11,8 @@ This repository contains my attempts at completing a collection of TypeScript ty
 
 ## Which challenges have I completed?
 > Click the following badges to see details of the challenges.
+
+<br>
 <!--challenges-start-->
+
 <!--challenges-end-->
