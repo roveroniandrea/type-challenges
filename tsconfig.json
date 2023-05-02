@@ -8,5 +8,7 @@
     "strict": true,
     "noEmit": true,
     "noImplicitThis": true
-  }
+  },
+  // Excluding custom script from type challenges' compiler
+  "exclude": ["scripts"]
 }
