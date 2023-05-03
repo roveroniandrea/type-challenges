@@ -26,7 +26,7 @@ jobs:
       - name: Execute npm script
         run: npm run readme
       - name: Commit changes
-        run:
+        run: |
           git add .
           git commit -m "Update README"
           git push
