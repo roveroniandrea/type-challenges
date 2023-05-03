@@ -30,5 +30,4 @@ jobs:
         with:
           message: 'Updated README'
           add: '.'
-      - name: Pushing changes
-        run: git push origin main
+          push: 'main'
