@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/roveroniandrea/type-challenges#readme",
   "devDependencies": {
+    "@types/node": "^18.16.3",
     "esno": "^0.16.3",
     "typescript": "^5.0.4"
   }

@@ -1,6 +1,8 @@
 import * as ts from "typescript";
 import { ChallengesByDifficulty, DIFFICULTY, Difficulty } from './types';
 import { handleBadgesMarkdown } from './to-badge';
+import { readFileSync, writeFileSync } from "fs";
+import * as path from "path";
 
 /** Runs ts for all found challenges, returning all the filenames with no errors */
 function compile(fileNames: string[], options: ts.CompilerOptions): string[] {
@@ -81,7 +83,31 @@ function groupChallenges(challengeFullNames: string[]): ChallengesByDifficulty[]
     return result;
 }
 
+const README_PATH = path.join(__dirname, "../readme.md");
+
+/** Updates the readme file with markdown from input */
+function buildReadme(markdown: string): void {
+    // Reading readme content
+    const readmeContent: string = readFileSync(README_PATH, "utf-8");
+    const regexp = /^(.*<!--challenges-start-->).*(<!--challenges-end-->.*)$/gs;
+    const matches = [...readmeContent.matchAll(regexp)];
+    if (matches.length) {
+        // Slicing the readme based on markers
+        const [, firstSlice, lastSlice] = matches[0];
+
+        // Injecting new markdown between slices
+        const newReadme: string = `${firstSlice}\n${markdown}\n${lastSlice}`;
+
+        // Writing file
+        writeFileSync(README_PATH, newReadme);
+    }
+    else {
+        // If readme.md does is not in the specified format, throw an error
+        throw new Error("Invalid readme.md");
+    }
+}
+
 const challenges = getCompletedChallenges();
 const challengesByDifficulty: ChallengesByDifficulty[] = groupChallenges(challenges);
 const markdownToApply: string = handleBadgesMarkdown(challengesByDifficulty);
-console.log(markdownToApply);
+buildReadme(markdownToApply);
