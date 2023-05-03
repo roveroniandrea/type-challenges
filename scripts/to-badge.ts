@@ -27,7 +27,7 @@ export function handleBadgesMarkdown(challenges: ChallengesByDifficulty[]): stri
     return challenges
         .filter(difficultyGroup => difficultyGroup.challenges.length)
         .map(difficultyGroup => {
-            const difficultyBadge: string = toBadge(difficultyGroup.difficulty, `${difficultyGroup.challenges.length}`, DIFFICULTY_COLORS[difficultyGroup.difficulty]);
+            const difficultyBadge: string = toBadgeLink('', difficultyGroup.difficulty, `${difficultyGroup.challenges.length}`, DIFFICULTY_COLORS[difficultyGroup.difficulty]);
 
             const challengeBadges: string = difficultyGroup.challenges.map(challenge => {
                 const challengeFormattedName: string = `${challenge.index}・${challenge.name}`;
