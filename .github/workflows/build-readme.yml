@@ -1,9 +1,9 @@
-name: Build readme on push to master
+name: Build readme on push to main
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   run-npm-script-readme:
