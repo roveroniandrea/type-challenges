@@ -3,20 +3,14 @@ name: Build readme on pull request opened
 on:
   pull_request:
     branches:
-      - develop
-    types:
-      - opened
+      - main
+    types: [opened, reopened, synchronize]
 
 jobs:
   build-readme:
+    if: github.event.pull_request.user.login == 'roveroniandrea'
     runs-on: ubuntu-latest
     steps:
-      - name: Verify author
-        run: |
-          if [ "${{ github.event.pull_request.user.login }}" != "roveroniandrea" ]; then
-            echo "PR author is not roveroniandrea. Skipping merge."
-            exit 0
-          fi
       - name: automerge
         uses: "pascalgn/automerge-action@v0.15.6"
         env:
