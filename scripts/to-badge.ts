@@ -20,7 +20,7 @@ const DIFFICULTY_COLORS: Record<Difficulty, string> = {
     extreme: 'b11b8d',
 }
 
-const getChallengeUrl = (fullname: string) => `github.com/type-challenges/type-challenges/blob/main/questions/${fullname}/README.md`
+const getChallengeUrl = (fullname: string) => `https://github.com/type-challenges/type-challenges/blob/main/questions/${fullname}/README.md`
 
 /** Generates the markdown text that needs to be inserted in order to correctly render all the challenges with respective badge */
 export function handleBadgesMarkdown(challenges: ChallengesByDifficulty[]): string {
