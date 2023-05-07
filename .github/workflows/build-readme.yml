@@ -1,26 +1,31 @@
-name: Build readme on push to develop
+name: Build readme on pull request opened
 
 on:
-  push:
+  pull_request:
     branches:
       - develop
+    types:
+      - opened
 
 jobs:
   build-readme:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify author
+        run: |
+          if [ "${{ github.event.pull_request.user.login }}" != "roveroniandrea" ]; then
+            echo "PR author is not roveroniandrea. Skipping merge."
+            exit 0
+          fi
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.15.6"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: ""
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           ref: main
-      - name: Merge develop into main
-        run: |
-          git fetch
-          git checkout develop
-          git merge main
-          git checkout main
-          git merge develop
-          git push
       - name: Install dependencies
         run: npm ci
       - name: Execute npm script
